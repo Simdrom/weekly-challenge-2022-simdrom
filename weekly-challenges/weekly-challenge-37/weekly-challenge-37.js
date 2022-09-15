@@ -20,25 +20,58 @@
  *
  */
 
-import zeldaJSON from "./zeldas.json" assert { type: "json" };
-
 const getDiffBetweenTwoGames = (gameOlder, gameNewer) => {
-  // console.log(
-  //   `Older game is ${JSON.stringify(
-  //     gameOlder
-  //   )}\n\nNewer game is ${JSON.stringify(gameNewer)}`
-  // );
-  const dateOfOlderGame = new Date(gameOlder.released_date);
-  const dateOfNewerGame = new Date(gameNewer.released_date);
-  // console.log(
-  //   `First game release is ${JSON.stringify(
-  //     dateOfOlderGame
-  //   )} and second game release is ${JSON.stringify(dateOfNewerGame)}`
-  // );
+  let [helpDate, dateOfOlderGame, dateOfNewerGame] = [
+    new Date(),
+    new Date(gameOlder.released_date),
+    new Date(gameNewer.released_date),
+  ];
+
+  dateOfNewerGame < dateOfOlderGame && [
+    (helpDate = dateOfNewerGame),
+    (dateOfNewerGame = dateOfOlderGame),
+    (dateOfOlderGame = helpDate),
+  ];
+
   const diffTime = Math.abs(dateOfNewerGame - dateOfOlderGame);
-  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24 * 365));
-  console.log(diffDays);
-  return diffDays;
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  let diffYears = Math.round(diffDays / 365);
+  let diffDaysWithoutYears = diffDays - diffYears * 365;
+
+  [diffYears, diffDaysWithoutYears] = getYearsAndDaysIfRestDaysAreNegative(
+    diffYears,
+    diffDaysWithoutYears
+  );
+
+  diffDaysWithoutYears += getLeapYearCount(
+    helpDate,
+    dateOfOlderGame,
+    dateOfNewerGame
+  );
+  helpDate = new Date();
+  return { years: diffYears, days: diffDaysWithoutYears };
 };
 
 export default getDiffBetweenTwoGames;
+
+const getYearsAndDaysIfRestDaysAreNegative = (
+  diffYears,
+  diffDaysWithoutYears
+) =>
+  diffDaysWithoutYears < 0
+    ? [(diffYears -= 1), (diffDaysWithoutYears *= -1)]
+    : [diffYears, diffDaysWithoutYears];
+
+const getLeapYearCount = (helpDate, dateOfOlderGame, dateOfNewerGame) => {
+  let leapYearCount = 0;
+  helpDate = dateOfOlderGame;
+
+  while (helpDate.getFullYear() != dateOfNewerGame.getFullYear()) {
+    const year = helpDate.getFullYear();
+    if ((0 == year % 4 && 0 != year % 100) || 0 == year % 400)
+      leapYearCount += 1;
+    helpDate.setFullYear(helpDate.getFullYear() + 1);
+  }
+  return leapYearCount;
+};
