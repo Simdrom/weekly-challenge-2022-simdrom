@@ -19,3 +19,26 @@
  *   https://retosdeprogramacion.com/semanales2022.
  *
  */
+
+import zeldaJSON from "./zeldas.json" assert { type: "json" };
+
+const getDiffBetweenTwoGames = (gameOlder, gameNewer) => {
+  // console.log(
+  //   `Older game is ${JSON.stringify(
+  //     gameOlder
+  //   )}\n\nNewer game is ${JSON.stringify(gameNewer)}`
+  // );
+  const dateOfOlderGame = new Date(gameOlder.released_date);
+  const dateOfNewerGame = new Date(gameNewer.released_date);
+  // console.log(
+  //   `First game release is ${JSON.stringify(
+  //     dateOfOlderGame
+  //   )} and second game release is ${JSON.stringify(dateOfNewerGame)}`
+  // );
+  const diffTime = Math.abs(dateOfNewerGame - dateOfOlderGame);
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24 * 365));
+  console.log(diffDays);
+  return diffDays;
+};
+
+export default getDiffBetweenTwoGames;
