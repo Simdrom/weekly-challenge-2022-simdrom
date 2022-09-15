@@ -1,0 +1,16 @@
+{
+  "name": "weekly-challenge-2022-mouredev",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "mocha -c",
+    "start": "node .\\weekly-challange-33.js"
+  },
+  "author": "Simdrom",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
+  },
+  "type": "module"
+}
