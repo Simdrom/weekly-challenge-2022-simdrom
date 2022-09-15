@@ -3,7 +3,7 @@ import calculatePkmnDamage from "../weekly-challenges/weekly-challenge-35.js";
 
 const expect = chai.expect;
 
-describe("calculatePkmnDamage", function () {
+describe.skip("calculatePkmnDamage", function () {
   // attackerType, defenserType, attackValue, defenseValue;
   it("expect 50, entering Fire vs Firex and having 1 damage and defense", () => {
     const enteredAttackerType = "Fire";
