@@ -17,14 +17,14 @@
  */
 
 //Using multiplication method
-const convertDecimalToBinary = (number) => {
-  console.log(`number: ${number}`);
+const convertDecimalToBinary = (number, decimalNumbers = 20) => {
   const integerPortion = getIntegerPortionFromANumber(number);
   const decimalPortion = getDecimalPortionFromANumber(number);
   let integerRemainder = getBinaryArrayFromIntegerNumber(integerPortion);
-  let decimalRemainder = getBinaryArrayFromDecimalNumber(decimalPortion);
-  console.log(`decimalPortion: ${Math.abs(decimalPortion)}`);
-  console.log(`decimalPortion: ${Math.abs(decimalPortion)}`);
+  let decimalRemainder = getBinaryArrayFromDecimalNumber(
+    decimalPortion,
+    decimalNumbers
+  );
   const resultAsString = `${integerRemainder}.${decimalRemainder.join("")}`;
   return resultAsString;
 };
@@ -32,35 +32,28 @@ const convertDecimalToBinary = (number) => {
 export default convertDecimalToBinary;
 const getBinaryArrayFromIntegerNumber = (number) => {
   let n = Number(number);
-  if (n == 0) return "0";
-  var r = "";
+  n == 0 && "0";
+  let r = "";
   while (n != 0) {
     r = (n & 1 ? "1" : "0") + r;
     n = n >>> 1;
   }
   return r;
 };
-const getBinaryArrayFromDecimalNumber = (number) => {
+const getBinaryArrayFromDecimalNumber = (number, decimalNumbers) => {
   let remainder = [];
   let tempIntegerPortion = 0;
   let tempDecimalPortion = number;
 
-  // console.log(` tempDecimalPortion entered: ${tempDecimalPortion}`);
-  while (remainder.length <= 19) {
-    const mutiplicationResult = tempDecimalPortion * 2;
-    // console.log(` mutiplicationResult: ${mutiplicationResult}`);
+  while (remainder.length < decimalNumbers) {
+    const mutiplicationResult = (tempDecimalPortion * 2).toFixed(100);
     tempIntegerPortion = getIntegerPortionFromANumber(mutiplicationResult);
     tempDecimalPortion = getDecimalPortionFromANumber(mutiplicationResult);
-    // console.log(` tempIntegerPortion: ${tempIntegerPortion}`);
     remainder.push(tempIntegerPortion);
-    // console.log(` tempDecimalPortion: ${tempDecimalPortion}`);
-    // console.log(` remainder: ${JSON.stringify(remainder)}`);
-
-    // console.log(`\n`);
     if (tempDecimalPortion === 0) break;
   }
   return remainder;
 };
 const getIntegerPortionFromANumber = (number) =>
   parseInt(number.toString().split(".")[0]);
-const getDecimalPortionFromANumber = (number) => (number % 1).toFixed(20);
+const getDecimalPortionFromANumber = (number) => (number % 1).toFixed(100);
